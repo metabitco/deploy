@@ -72,6 +72,9 @@ module.exports = class DeployCommand extends Command {
             this.spinner.stopAndPersist();
             this.spinner.fail('Couldn\'t login! Please check the auth details and internet connection, then try again.')
             checkOrInitLogFiles(date, host, e, host.name);
+            if (bugsnag) {
+                bugsnag.notify(e);
+            }
             return 1;
         }
 
@@ -107,8 +110,9 @@ module.exports = class DeployCommand extends Command {
             checkOrInitLogFiles(date, host, output, name);
             return;
         } catch (e) {
-            console.log('')
-            console.error(e)
+            if (bugsnag) {
+                bugsnag.notify(e);
+            }
             this.spinner = this.spinner.stopAndPersist({
                 text: name + ' failed during execution!',
                 symbol: this.chalk.red('✖'),

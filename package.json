@@ -15,6 +15,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@bugsnag/js": "^6.4.2",
     "forge-cli": "^0.2.1",
     "node-ssh": "^6.0.0",
     "ora": "^4.0.2"
