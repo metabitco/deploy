@@ -1,4 +1,3 @@
-'use strict';
 let Application = require('forge-cli');
 
 Application.register(__dirname, [

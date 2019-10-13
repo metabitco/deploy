@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "main": "index.js",
   "bin": {
-    "deploy": "./index.js"
+    "deploy": "./deploy"
   },
   "license": "MIT",
   "dependencies": {
