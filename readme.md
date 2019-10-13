@@ -1,6 +1,7 @@
 # Deploy.
 This package aims to fill a minor void of programmable deployment steps built in NodeJS. Why NodeJS? Because that's one of the only languages I know best, and it's not in a container on my computer.
 
+![./deploy.gif](deploy.gif)
 #### What can this do?
 Initially this was meant to be a code deployment tool. Where you set up steps to be ran on your servers, and have it all facilitated from your computer.
 
