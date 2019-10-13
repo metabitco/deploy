@@ -65,8 +65,28 @@ const checkOrInitLogFiles = (date, host, output, name) => {
     fs.appendFileSync(logDir + '/' + slugify(name) + '.log', output);
 }
 
+const timestamp = () => {
+    const pad = (number) => {
+        var r = String(number);
+        if ( r.length === 1 ) {
+            r = '0' + r;
+        }
+        return r;
+    }
+
+    let date = new Date;
+    return date.getUTCFullYear()
+        + '-' + pad( date.getUTCMonth() + 1 )
+        + '-' + pad( date.getUTCDate() )
+        + ' ' + pad( date.getUTCHours() )
+        + ':' + pad( date.getUTCMinutes() )
+        + ':' + pad( date.getUTCSeconds() )
+        + '-UTC'
+}
+
 module.exports = {
     checkOrInitDeployFile,
     slugify,
     checkOrInitLogFiles,
+    timestamp
 }

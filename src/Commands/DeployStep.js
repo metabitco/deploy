@@ -1,14 +1,14 @@
 const Command = require('forge-cli/src/Command');
-const { checkOrInitDeployFile, slugify, checkOrInitLogFiles } = require('../helpers');
+const { checkOrInitDeployFile, timestamp, checkOrInitLogFiles } = require('../helpers');
 const node_ssh = require('node-ssh');
 const ssh  = new node_ssh();
 const fs = require('fs');
-const date = new Date;
+const date = timestamp();
 
 module.exports = class DeployStepCommand extends Command {
     constructor(context) {
         super(context);
-        this.signature = 'step {step}';
+        this.signature = 'step {part}';
         this.description = 'This will list all commands registered with an application.';
         this.spinner = require('ora')();
         this.handle = this.handle.bind(this);
@@ -26,15 +26,22 @@ module.exports = class DeployStepCommand extends Command {
             scripts: config.scripts,
         })
 
+        let type = 'succeed'
         for (let key in config.hosts) {
             const host = config.hosts[key];
-            await this.connectAndExecute({
+            let status = await this.connectAndExecute({
                 host,
-                scripts: config.scripts,
+                scripts: config.scripts.filter(script => script.name === this.argument('part')),
             })
+
+            if (status === 1) {
+                type = 'fail';
+            }
         }
 
-        this.spinner.succeed(this.chalk.green('Successfully deployed!'))
+        this.spinner[type](type === 'succeed'
+        ? this.chalk.green('Successfully deployed!')
+        : this.chalk.red('Something went wrong!'))
     }
 
     ensureScriptsExist({ scripts }) {
@@ -47,9 +54,13 @@ module.exports = class DeployStepCommand extends Command {
     }
 
     async connectAndExecute({ host, scripts }) {
-        const { ip, user, identityFile } = host;
-        this.spinner.start('Logging into ' + ip + ' as ' + user);
+        const { ip, user, identityFile, name } = host;
+        if (scripts.length === 0) {
+            this.spinner.fail('We have no scripts to run for server ' + name);
+            return 1;
+        }
 
+        this.spinner.start('Logging into ' + ip + ' as ' + user);
         try {
             await ssh.connect({
                 host: ip,
@@ -75,14 +86,14 @@ module.exports = class DeployStepCommand extends Command {
         ssh.dispose();
     }
 
-    async executeScript(script, host) {
+    async executeScript({ file, name }, host) {
         try {
             const output = await ssh.exec(fs.readFileSync(file))
             this.spinner = this.spinner.stopAndPersist({
                 text: this.chalk.green(name) + this.chalk.white(' on ') + this.chalk.green(host.name),
                 symbol: this.chalk.green('✔'),
             });
-            checkOrInitLogFiles(date, host, output);
+            checkOrInitLogFiles(date, host, output, name);
             return;
         } catch (e) {
             console.error(e)
