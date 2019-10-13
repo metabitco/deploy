@@ -54,7 +54,7 @@ module.exports = class DeployCommand extends Command {
             await ssh.connect({
                 host: ip,
                 username: user,
-                privateKey: identityFile
+                privateKey: identityFile.startsWith('/') ? identityFile : process.env.HOME + '/' + identityFile
             });
             this.spinner = this.spinner.stopAndPersist({
                 text: 'Successfully logged into ' + ip + ' as ' + user,
@@ -75,7 +75,7 @@ module.exports = class DeployCommand extends Command {
         ssh.dispose();
     }
 
-    async executeScript(script, host) {
+    async executeScript({name, file}, host) {
         try {
             const output = await ssh.exec(fs.readFileSync(file))
             this.spinner = this.spinner.stopAndPersist({
