@@ -1,5 +1,10 @@
 # Deploy.
-This 
+This package aims to fill a minor void of programmable deployment steps built in NodeJS. Why NodeJS? Because that's one of the only languages I know best, and it's not in a container on my computer.
+
+#### What can this do?
+Initially this was meant to be a code deployment tool. Where you set up steps to be ran on your servers, and have it all facilitated from your computer.
+
+But it doesn't have to relate to code deployments. It could be scheduling tasks on servers, or moving around log files, scheduling updates, really the only limit here is what you want to do with a server.
 
 # Installation
 ```bash
@@ -34,6 +39,38 @@ type script = {
 ```
 
 for each script denoted, it will be ran on each server once. Scripts will be ran on servers in order.
+
+Deploy file created on first start:
+```js
+module.exports = {
+    hosts: [
+        {
+            name: "strontium",
+            ip: "198.168.1.20",
+            identityFile: "/home/ubuntu/.ssh/id_rsa",
+            user: "ubuntu"
+        },
+    ],
+    scripts: [
+        {
+            name: "updates",
+            file: ".scripts/system-updates.sh",
+        },
+        {
+            name: "deploy",
+            file: ".scripts/git-clone-composer-install-deploy.sh",
+        },
+        {
+            name: "deploy:prepare",
+            file: ".scripts/build-npm.sh",
+        },
+        {
+            name: "deploy:release",
+            file: ".scripts/tag-release-deploy.sh",
+        }
+    ]
+}
+```
 
 ### Scripts
 Scripts are located in a `.scripts` directory in your current working directory. Scripts are expected to be bash scripts and are not fed any extra parameters by default.
