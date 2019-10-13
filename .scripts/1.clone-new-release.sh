@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+DEPLOY_BASE_DIRECTORY=/home/ubuntu/APPLICATION_NAME
+DEPLOY_DIRECTORY="$DEPLOY_BASE_DIRECTORY"/releases
+DEPLOY_NAME=$(date +"%Y%m%d%H%M%S")
+GIT_REPO=git@github.com:USER/REPO_TO_DEPLOY.git
+
+cat <<EOF > .deploy-changelager-env
+export DEPLOY_BASE_DIRECTORY="$DEPLOY_BASE_DIRECTORY"
+export DEPLOY_DIRECTORY="$DEPLOY_DIRECTORY"
+export DEPLOY_NAME="$DEPLOY_NAME"
+export GIT_REPO="$GIT_REPO"
+EOF
+
+cd $DEPLOY_DIRECTORY
+git clone "$GIT_REPO" "$DEPLOY_NAME" 2>&1
