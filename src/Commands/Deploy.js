@@ -26,15 +26,23 @@ module.exports = class DeployCommand extends Command {
             scripts: config.scripts,
         })
 
+        let type = 'succeed';
         for (let key in config.hosts) {
             const host = config.hosts[key];
-            await this.connectAndExecute({
+            let status = await this.connectAndExecute({
                 host,
                 scripts: config.scripts,
             })
+
+            if (status === 1) {
+                type = 'fail';
+                break;
+            }
         }
 
-        this.spinner.succeed(this.chalk.green('Successfully deployed!'))
+        this.spinner[type](type === 'succeed'
+            ? this.chalk.green('Successfully deployed!')
+            : this.chalk.red('Something went wrong!'))
     }
 
     ensureScriptsExist({ scripts }) {
@@ -63,16 +71,28 @@ module.exports = class DeployCommand extends Command {
         } catch (e) {
             this.spinner.stopAndPersist();
             this.spinner.fail('Couldn\'t login! Please check the auth details and internet connection, then try again.')
-            return;
+            return 1;
         }
 
+        let status;
         for (let key in scripts) {
             const script = scripts[key];
 
-            await this.executeScript(script, host)
+            status = await this.executeScript(script, host)
+
+            if (status === 1) {
+                break;
+            }
         }
 
-        ssh.dispose();
+        try {
+            ssh.dispose();
+        } finally {
+            if (status === 1) {
+                return 1;
+            }
+            return;
+        }
     }
 
     async executeScript({name, file}, host) {
@@ -86,12 +106,13 @@ module.exports = class DeployCommand extends Command {
             checkOrInitLogFiles(date, host, name, output);
             return;
         } catch (e) {
+            console.log('')
             console.error(e)
             this.spinner = this.spinner.stopAndPersist({
                 text: name + ' failed during execution!',
                 symbol: this.chalk.red('✖'),
             })
-            return null;
+            return 1;
         }
     }
 }
