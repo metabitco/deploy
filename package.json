@@ -1,8 +1,8 @@
 {
-  "name": "deploy",
+  "name": "@metabit/deploy",
   "description": "A package meant to run scripts over an SSH connection. (Ideal for deploys)",
-  "author": "austinkregel",
-  "version": "1.0.0",
+  "author": "metabitco",
+  "version": "0.0.1",
   "main": "index.js",
   "bin": {
     "deploy": "./index.js"
