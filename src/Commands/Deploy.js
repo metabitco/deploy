@@ -36,6 +36,7 @@ module.exports = class DeployCommand extends Command {
 
             if (status === 1) {
                 type = 'fail';
+                checkOrInitLogFiles(date, host, host.name, e.message);
                 break;
             }
         }
@@ -71,6 +72,7 @@ module.exports = class DeployCommand extends Command {
         } catch (e) {
             this.spinner.stopAndPersist();
             this.spinner.fail('Couldn\'t login! Please check the auth details and internet connection, then try again.')
+            checkOrInitLogFiles(date, host, host.name, e.message);
             return 1;
         }
 
@@ -112,6 +114,7 @@ module.exports = class DeployCommand extends Command {
                 text: name + ' failed during execution!',
                 symbol: this.chalk.red('✖'),
             })
+            checkOrInitLogFiles(date, host, name, e.message);
             return 1;
         }
     }
