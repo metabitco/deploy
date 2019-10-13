@@ -82,7 +82,7 @@ module.exports = class DeployCommand extends Command {
                 text: this.chalk.green(name) + this.chalk.white(' on ') + this.chalk.green(host.name),
                 symbol: this.chalk.green('✔'),
             });
-            checkOrInitLogFiles(date, host, output);
+            checkOrInitLogFiles(date, host, name, output);
             return;
         } catch (e) {
             console.error(e)

@@ -53,16 +53,16 @@ function slugify(string) {
         .replace(/-+$/, '') // Trim - from end of text
 }
 
-const checkOrInitLogFiles = (date, host, output) => {
+const checkOrInitLogFiles = (date, host, output, name) => {
     const logDir = '.scripts/logs/' + date + '/' + slugify(host.name);
     if (!fs.existsSync(logDir)) {
         fs.mkdirSync(logDir, {
             recursive: true
         });
-        fs.writeFileSync(logDir + '/' + slugify(script.name) + '.log', '');
+        fs.writeFileSync(logDir + '/' + slugify(name) + '.log', '');
     }
 
-    fs.appendFileSync(logDir + '/' + slugify(script.name) + '.log', output);
+    fs.appendFileSync(logDir + '/' + slugify(name) + '.log', output);
 }
 
 module.exports = {
