@@ -1,9 +1,9 @@
 const Command = require('forge-cli/src/Command');
-const { checkOrInitDeployFile, slugify, checkOrInitLogFiles } = require('../helpers');
+const { checkOrInitDeployFile, timestamp, checkOrInitLogFiles } = require('../helpers');
 const node_ssh = require('node-ssh');
 const ssh  = new node_ssh();
 const fs = require('fs');
-const date = new Date;
+const date = timestamp();
 
 module.exports = class DeployCommand extends Command {
     constructor(context) {
@@ -71,7 +71,7 @@ module.exports = class DeployCommand extends Command {
         } catch (e) {
             this.spinner.stopAndPersist();
             this.spinner.fail('Couldn\'t login! Please check the auth details and internet connection, then try again.')
-            checkOrInitLogFiles(date, host, host.name, e.message);
+            checkOrInitLogFiles(date, host, e.message, host.name);
             return 1;
         }
 
@@ -104,7 +104,7 @@ module.exports = class DeployCommand extends Command {
                 text: this.chalk.green(name) + this.chalk.white(' on ') + this.chalk.green(host.name),
                 symbol: this.chalk.green('✔'),
             });
-            checkOrInitLogFiles(date, host, name, output);
+            checkOrInitLogFiles(date, host, output, name);
             return;
         } catch (e) {
             console.log('')
@@ -113,7 +113,7 @@ module.exports = class DeployCommand extends Command {
                 text: name + ' failed during execution!',
                 symbol: this.chalk.red('✖'),
             })
-            checkOrInitLogFiles(date, host, name, e.message);
+            checkOrInitLogFiles(date, host, e.message, name);
             return 1;
         }
     }
