@@ -76,6 +76,7 @@ module.exports = class DeployCommand extends Command {
     }
 
     async executeScript({name, file}, host) {
+        this.spinner.start('Executing task ' + name)
         try {
             const output = await ssh.exec(fs.readFileSync(file))
             this.spinner = this.spinner.stopAndPersist({
