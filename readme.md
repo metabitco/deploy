@@ -38,6 +38,13 @@ type script = {
     file: string;
 }
 ```
+Something you may want to keep in mind is that `git` will send things to stderr even when things are successful and the `ssh2` lib can't handle that too well. So I recommend redirecting all output to stdout and just look over the logs.
+```
+GIT_REPO=git@github.com:austinkregel/finance.git
+DEPLOY_NAME=$(date +"%Y%m%d%H%M%S")
+
+git clone "$GIT_REPO" "$DEPLOY_NAME" 2>&1
+```
 
 for each script denoted, it will be ran on each server once. Scripts will be ran on servers in order.
 
