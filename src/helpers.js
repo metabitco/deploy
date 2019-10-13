@@ -5,16 +5,16 @@ const checkOrInitDeployFile = ({ pwd, configFile }) => {
         fs.writeFileSync(pwd + configFile, `module.exports = {
     hosts: [
         {
-            name: "colorful-huricane",
-            ip: "198.199.75.80",
-            identityFile: "/home/austinkregel/.ssh/id_rsa",
-            user: "forge"
+            name: "huricane",
+            ip: "20.3.103.54",
+            identityFile: ".ssh/id_rsa",
+            user: "root"
         },
         {
-            name: "main-meadow",
-            ip: "192.81.214.240",
-            identityFile: "/home/austinkregel/.ssh/id_rsa",
-            user: "forge"
+            name: "meadow",
+            ip: "38.103.98.1",
+            identityFile: "/.ssh/id_rsa",
+            user: "root"
         }
     ],
     scripts: [
