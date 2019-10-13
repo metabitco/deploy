@@ -71,7 +71,7 @@ module.exports = class DeployCommand extends Command {
         } catch (e) {
             this.spinner.stopAndPersist();
             this.spinner.fail('Couldn\'t login! Please check the auth details and internet connection, then try again.')
-            checkOrInitLogFiles(date, host, e.message, host.name);
+            checkOrInitLogFiles(date, host, e, host.name);
             return 1;
         }
 
@@ -113,7 +113,7 @@ module.exports = class DeployCommand extends Command {
                 text: name + ' failed during execution!',
                 symbol: this.chalk.red('✖'),
             })
-            checkOrInitLogFiles(date, host, e.message, name);
+            checkOrInitLogFiles(date, host, e, name);
             return 1;
         }
     }
