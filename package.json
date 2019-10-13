@@ -1,0 +1,16 @@
+{
+  "name": "deploy",
+  "description": "A package meant to run scripts over an SSH connection. (Ideal for deploys)",
+  "author": "austinkregel",
+  "version": "1.0.0",
+  "main": "index.js",
+  "bin": {
+    "deploy": "./index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "forge-cli": "^0.2.1",
+    "node-ssh": "^6.0.0",
+    "ora": "^4.0.2"
+  }
+}
