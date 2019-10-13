@@ -36,7 +36,6 @@ module.exports = class DeployCommand extends Command {
 
             if (status === 1) {
                 type = 'fail';
-                checkOrInitLogFiles(date, host, host.name, e.message);
                 break;
             }
         }
