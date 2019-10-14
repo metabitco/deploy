@@ -5,29 +5,15 @@ const checkOrInitDeployFile = ({ pwd, configFile }) => {
         fs.writeFileSync(pwd + configFile, `module.exports = {
     hosts: [
         {
-            name: "huricane",
-            ip: "20.3.103.54",
+            name: "example",
+            ip: "example.com",
             identityFile: ".ssh/id_rsa",
-            user: "root"
-        },
-        {
-            name: "meadow",
-            ip: "38.103.98.1",
-            identityFile: "/.ssh/id_rsa",
             user: "root"
         }
     ],
     scripts: [
         {
             name: "deploy",
-            file: ".scripts/init-deploy.sh",
-        },
-        {
-            name: "deploy:prepare",
-            file: ".scripts/prepare-deploy.sh",
-        },
-        {
-            name: "deploy:release",
             file: ".scripts/release-deploy.sh",
         }
     ]
