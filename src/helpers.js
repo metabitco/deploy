@@ -41,6 +41,11 @@ function slugify(string) {
 
 const checkOrInitLogFiles = (date, host, output, name) => {
     const logDir = '.scripts/logs/' + date + '/' + slugify(host.name);
+
+    if (output.length === 0) {
+         return;
+    }
+
     if (!fs.existsSync(logDir)) {
         fs.mkdirSync(logDir, {
             recursive: true

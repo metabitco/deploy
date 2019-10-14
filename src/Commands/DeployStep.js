@@ -88,12 +88,13 @@ module.exports = class DeployStepCommand extends Command {
 
     async executeScript({ file, name }, host) {
         try {
-            const output = await ssh.exec(fs.readFileSync(file))
+            const {stderr, stdout} = await ssh.exec(fs.readFileSync(file))
             this.spinner = this.spinner.stopAndPersist({
                 text: this.chalk.green(name) + this.chalk.white(' on ') + this.chalk.green(host.name),
                 symbol: this.chalk.green('✔'),
             });
-            checkOrInitLogFiles(date, host, output, name);
+            checkOrInitLogFiles(date, host, stderr, name+'-stderr');
+            checkOrInitLogFiles(date, host, stdout, name+'-stdout');
             return;
         } catch (e) {
             console.error(e)
