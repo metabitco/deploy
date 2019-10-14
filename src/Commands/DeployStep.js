@@ -1,6 +1,6 @@
 const Command = require('forge-cli/src/Command');
 const { checkOrInitDeployFile, timestamp, checkOrInitLogFiles } = require('../helpers');
-const node_ssh = require('node-ssh');
+const node_ssh = require('../node-ssh');
 const ssh  = new node_ssh();
 const fs = require('fs');
 const date = timestamp();
