@@ -1,4 +1,4 @@
-# Deploy.
+# Deploy. [with examples](https://github.com/metabitco/deploy-examples)
 This package aims to fill a minor void of programmable deployment steps built in NodeJS. Why NodeJS? Because that's one of the only languages I know best, and it's not in a container on my computer.
 
 ![./deploy.gif](deploy.gif)
@@ -12,7 +12,7 @@ But it doesn't have to relate to code deployments. It could be scheduling tasks 
 npm i -g @metabit/deploy
 ```
 
-# Useage
+# Usage
 ```bash
 deploy start
 ```
