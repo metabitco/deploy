@@ -1,6 +1,6 @@
 const Command = require('forge-cli/src/Command');
 const { checkOrInitDeployFile, timestamp, checkOrInitLogFiles } = require('../helpers');
-const node_ssh = require('node-ssh');
+const node_ssh = require('../node-ssh');
 const ssh  = new node_ssh();
 const fs = require('fs');
 const date = timestamp();
@@ -102,12 +102,13 @@ module.exports = class DeployCommand extends Command {
     async executeScript({name, file}, host) {
         this.spinner.start('Executing task ' + name)
         try {
-            const output = await ssh.exec(fs.readFileSync(file))
+            const {stderr, stdout} = await ssh.exec(fs.readFileSync(file))
             this.spinner = this.spinner.stopAndPersist({
                 text: this.chalk.green(name) + this.chalk.white(' on ') + this.chalk.green(host.name),
                 symbol: this.chalk.green('✔'),
             });
-            checkOrInitLogFiles(date, host, output, name);
+            checkOrInitLogFiles(date, host, stderr, name+'-stderr');
+            checkOrInitLogFiles(date, host, stdout, name+'-stdout');
             return;
         } catch (e) {
             if (bugsnag) {
